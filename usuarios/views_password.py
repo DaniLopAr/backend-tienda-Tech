@@ -14,7 +14,9 @@ import traceback
 def solicitar_reset(request):
     try:
         email = request.data.get('email')
-        usuario = Usuario.objects.get(email=email)
+        usuario = Usuario.objects.filter(email=email).first()
+        if not usuario:
+            return Response({'message': 'Correo enviado'})
         token = default_token_generator.make_token(usuario)
         uid = urlsafe_base64_encode(force_bytes(usuario.pk))
 
