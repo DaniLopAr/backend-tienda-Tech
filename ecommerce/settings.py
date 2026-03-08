@@ -17,6 +17,9 @@ from decouple import config
 from pathlib import Path
 import os
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', cast=bool)
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
 
@@ -143,7 +146,6 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_ALL_ORIGINS = True  # temporal para debug
 
 
-
 AUTH_USER_MODEL = 'usuarios.Usuario'
 
 
@@ -187,4 +189,3 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('BREVO_EMAIL')
 EMAIL_HOST_PASSWORD = os.environ.get('BREVO_SMTP_KEY')
 DEFAULT_FROM_EMAIL = os.environ.get('BREVO_EMAIL')
-
