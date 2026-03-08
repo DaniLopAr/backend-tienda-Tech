@@ -45,12 +45,10 @@ class ConfirmarOrdenView(APIView):
             print('Total:', total)
 
             resultado = enviar_factura(
-                orden_data={
-                    'nombre': nombre,
-                    'items': items,
-                    'total': total,
-                },
-                email_destino=request.user.email
+                email=request.user.email,
+                nombre=nombre,
+                items=items,
+                total=total,
             )
 
             print('Resultado envío:', resultado)
