@@ -7,10 +7,13 @@ from rest_framework.response import Response
 from .models import Usuario
 
 
+import traceback
+
+
 @api_view(['POST'])
 def solicitar_reset(request):
-    email = request.data.get('email')
     try:
+        email = request.data.get('email')
         usuario = Usuario.objects.get(email=email)
         token = default_token_generator.make_token(usuario)
         uid = urlsafe_base64_encode(force_bytes(usuario.pk))
@@ -19,15 +22,16 @@ def solicitar_reset(request):
 
         send_mail(
             subject='Recuperación de contraseña - Techno',
-            message=f'Hola {usuario.username},\n\nHaz click en el siguiente enlace para restablecer tu contraseña:\n\n{link}\n\nEste enlace expira en 24 horas.',
+            message=f'Hola {usuario.username},\n\nEnlace para restablecer tu contraseña:\n\n{link}\n\nEste enlace expira en 24 horas.',
             from_email=None,
             recipient_list=[email],
             fail_silently=False,
         )
         return Response({'message': 'Correo enviado'})
     except Usuario.DoesNotExist:
-        # no revelar si existe o no
         return Response({'message': 'Correo enviado'})
+    except Exception as e:
+        return Response({'error': str(e), 'trace': traceback.format_exc()}, status=500)
 
 
 @api_view(['POST'])
