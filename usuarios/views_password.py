@@ -54,3 +54,21 @@ def confirmar_reset(request):
             return Response({'error': 'Token inválido o expirado'}, status=400)
     except Exception:
         return Response({'error': 'Error al procesar la solicitud'}, status=400)
+    
+    from django.core.mail import send_mail
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+@api_view(['GET'])
+def test_email(request):
+    try:
+        send_mail(
+            subject='Test Brevo',
+            message='Si recibes esto, Brevo funciona.',
+            from_email=None,
+            recipient_list=['dj02lopeza@gmail.com'],  # tu correo
+            fail_silently=False,
+        )
+        return Response({'message': 'Correo enviado'})
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
