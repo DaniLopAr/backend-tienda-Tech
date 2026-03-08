@@ -62,12 +62,12 @@ def confirmar_reset(request):
     try:
         pk = force_str(urlsafe_base64_decode(uid))
         usuario = Usuario.objects.get(pk=pk)
-
-        if default_token_generator.check_token(usuario, token):
-            usuario.set_password(password)
-            usuario.save()
-            return Response({'message': 'Contraseña actualizada'})
-        else:
-            return Response({'error': 'Token inválido o expirado'}, status=400)
-    except Exception:
-        return Response({'error': 'Error al procesar la solicitud'}, status=400)
+        valid = default_token_generator.check_token(usuario, token)
+        return Response({
+            'usuario': usuario.username,
+            'pk': pk,
+            'valid': valid,
+            'token': token,
+        })
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
