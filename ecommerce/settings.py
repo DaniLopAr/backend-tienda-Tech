@@ -140,6 +140,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://front-tech-brown.vercel.app",
 
 ]
+CORS_ALLOW_ALL_ORIGINS = True  # temporal para debug
+
 
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
