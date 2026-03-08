@@ -1,15 +1,16 @@
 import os
-import sib_api_v3_sdk
-from django.template.loader import render_to_string
-from weasyprint import HTML
-from datetime import datetime
+import base64
 import random
+import sib_api_v3_sdk
+from io import BytesIO
+from datetime import datetime
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
 
 
 def enviar_factura(email, nombre, items, total):
     numero_orden = f"TEC-{random.randint(10000, 99999)}"
     fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
-    subtotal = total if total <= 2000 else total - 15
     envio = "¡Gratis!" if total > 2000 else "₡15"
 
     items_detalle = []
@@ -28,12 +29,13 @@ def enviar_factura(email, nombre, items, total):
         'fecha': fecha,
         'nombre': nombre,
         'items': items_detalle,
-        'subtotal': subtotal,
         'envio': envio,
         'total': total,
     })
 
-    pdf = HTML(string=html_string).write_pdf()
+    pdf_buffer = BytesIO()
+    pisa.CreatePDF(html_string, dest=pdf_buffer)
+    pdf = pdf_buffer.getvalue()
 
     configuration = sib_api_v3_sdk.Configuration()
     configuration.api_key['api-key'] = os.environ.get('BREVO_API_KEY')
@@ -46,7 +48,7 @@ def enviar_factura(email, nombre, items, total):
         subject=f"Tu factura {numero_orden} - Techno",
         text_content=f"Hola {nombre}, adjuntamos tu factura de compra en Techno.\n\nGracias por tu compra.",
         attachment=[{
-            "content": __import__('base64').b64encode(pdf).decode(),
+            "content": base64.b64encode(pdf).decode(),
             "name": f"factura-{numero_orden}.pdf"
         }]
     )
