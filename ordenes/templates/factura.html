@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: #1a1a2e;
+            background: white;
+            padding: 40px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #7c3aed;
+        }
+
+        .logo-name {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            background: linear-gradient(135deg, #7c3aed, #f72585);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-tagline {
+            font-size: 10px;
+            color: #888;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .factura-info { text-align: right; }
+
+        .factura-titulo {
+            font-size: 13px;
+            font-weight: 700;
+            color: #7c3aed;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .factura-numero {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-top: 4px;
+        }
+
+        .factura-fecha {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .cliente-section {
+            background: #f8f5ff;
+            border-left: 4px solid #7c3aed;
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+        }
+
+        .cliente-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #7c3aed;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .cliente-nombre {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+
+        thead tr {
+            background: #7c3aed;
+            color: white;
+        }
+
+        thead th {
+            padding: 12px 16px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        thead th:last-child { text-align: right; }
+
+        tbody tr {
+            border-bottom: 1px solid #f0eaff;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        tbody td {
+            padding: 14px 16px;
+            font-size: 13px;
+            color: #333;
+        }
+
+        tbody td:last-child {
+            text-align: right;
+            font-weight: 600;
+            color: #7c3aed;
+        }
+
+        .totales {
+            margin-left: auto;
+            width: 280px;
+        }
+
+        .totales-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 13px;
+            color: #555;
+            border-bottom: 1px solid #f0eaff;
+        }
+
+        .totales-final {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 0 0;
+            font-size: 18px;
+            font-weight: 800;
+            color: #1a1a2e;
+        }
+
+        .totales-final span:last-child {
+            color: #7c3aed;
+        }
+
+        .footer {
+            margin-top: 48px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 11px;
+            color: #aaa;
+            line-height: 1.8;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #f0eaff;
+            color: #7c3aed;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <div class="logo-name">TECHNO</div>
+            <div class="logo-tagline">Next Gen Gear</div>
+        </div>
+        <div class="factura-info">
+            <div class="factura-titulo">Factura</div>
+            <div class="factura-numero">#{{ numero_orden }}</div>
+            <div class="factura-fecha">{{ fecha }}</div>
+        </div>
+    </div>
+
+    <div class="cliente-section">
+        <div class="cliente-label">Facturado a</div>
+        <div class="cliente-nombre">{{ nombre }}</div>
+    </div>
+
+    <span class="badge">Detalle del pedido</span>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio unit.</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.nombre }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>₡{{ item.precio_unitario|floatformat:0 }}</td>
+                <td>₡{{ item.subtotal|floatformat:0 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="totales">
+        <div class="totales-row">
+            <span>Subtotal</span>
+            <span>₡{{ subtotal|floatformat:0 }}</span>
+        </div>
+        <div class="totales-row">
+            <span>Envío</span>
+            <span>{{ envio }}</span>
+        </div>
+        <div class="totales-final">
+            <span>Total</span>
+            <span>₡{{ total|floatformat:0 }}</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Gracias por tu compra en Techno — Next Gen Gear</p>
+        <p>Este documento es un comprobante oficial de tu pedido.</p>
+    </div>
+
+</body>
+</html>
