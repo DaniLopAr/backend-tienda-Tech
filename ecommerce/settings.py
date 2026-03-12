@@ -191,3 +191,5 @@ EMAIL_HOST_PASSWORD = os.environ.get('BREVO_SMTP_KEY')
 DEFAULT_FROM_EMAIL = os.environ.get('BREVO_EMAIL')
 
 TEMPLATES[0]['DIRS'] = [BASE_DIR / 'ordenes' / 'templates']
+
+CSRF_TRUSTED_ORIGINS = ['https://web-production-6c2af.up.railway.app']
