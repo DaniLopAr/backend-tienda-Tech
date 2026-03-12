@@ -17,23 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView as token, TokenRefreshView as token_refresh
-from django.contrib.auth import get_user_model
-from django.http import HttpResponse
-
-def crear_admin(request):
-    User = get_user_model()
-    if not User.objects.filter(username='admin').exists():
-        User.objects.create_superuser('admin', 'dj02lopeza@gmail.com', 'Admin1234!')
-        return HttpResponse('Superusuario creado')
-    return HttpResponse('Ya existe')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('productos.urls')),
     path('api/', include('usuarios.urls')),
     path('api/ordenes/', include('ordenes.urls')),
-    path('crear-admin/', crear_admin),
-
 
     # Autentitacion con JWT
     path('api/token/', token.as_view(), name='token_obtain_pair'),
