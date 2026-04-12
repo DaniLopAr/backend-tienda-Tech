@@ -141,6 +141,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5174",
     "https://front-tech-brown.vercel.app",
+    'https://backend-tienda-tech.onrender.com',
 
 ]
 CORS_ALLOW_ALL_ORIGINS = True  # temporal para debug
@@ -192,4 +193,4 @@ DEFAULT_FROM_EMAIL = os.environ.get('BREVO_EMAIL')
 
 TEMPLATES[0]['DIRS'] = [BASE_DIR / 'ordenes' / 'templates']
 
-CSRF_TRUSTED_ORIGINS = ['https://web-production-6c2af.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://backend-tienda-tech.onrender.com']
